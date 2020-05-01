@@ -1,0 +1,30 @@
+{
+  "name": "cardioid",
+  "version": "0.0.1",
+  "description": "Modular Multiplication Circle - create cardioid visualisations.",
+  "productName": "Cardioid",
+  "cordovaId": "",
+  "capacitorId": "",
+  "author": "Jaimie Avery <jaimie.avery@gmail.com>",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.0.0",
+    "p5": "^1.0.0",
+    "quasar": "^1.0.0"
+  },
+  "devDependencies": {
+    "@quasar/app": "^1.0.0",
+    "@quasar/quasar-app-extension-qribbon": "^1.0.0-beta.14"
+  },
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ]
+}
