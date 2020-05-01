@@ -1,6 +1,6 @@
 # Modular Multiplication Circle - Create cardioid visualisations.
 
-Built using [quasar.dev]
+Built using [quasar.dev](quasar.dev)
 
 ## Install the dependencies
 ```bash
