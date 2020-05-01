@@ -1,6 +1,6 @@
-# Quasar App (scratch)
+# Modular Multiplication Circle - Create cardioid visualisations.
 
-A Quasar Framework app
+Built using [quasar.dev]
 
 ## Install the dependencies
 ```bash
