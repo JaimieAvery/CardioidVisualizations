@@ -1,217 +1,186 @@
 <template>
-   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="fade">
+  <q-layout view="hHh lpR fFf">
+    <q-header class="fade">
       <q-toolbar>
-        <q-toolbar-title>
-          Modular Multiplication Circle
-        </q-toolbar-title>
+        <q-toolbar-title> Modular Arithmetic Circle </q-toolbar-title>
         <div class="q-pr-md">Create cardioid visualisations.</div>
-        <q-btn
-          flat
-          dense
-          round
-          :icon="!leftDrawerOpen?'menu':'close'"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
+        <q-btn flat dense round :icon="!store.menuOpen ? 'menu' : 'close'" aria-label="Menu" @click="toggleMenu()" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      overlay
-      class="q-mlg"
-      side="right"
-      content-class="bg-grey-1"
-    >
-      <div class="q-pl-lg fit" style="background: black;">
-        <q-list dense class="q-pt-sm" style="background: white;">
-  <!-- Visualisation-->
-          <q-ribbon
-            position="left"
-            color="white"
-            background-color="primary"
-            :leaf-color="displayColour"
-            decoration="point-in">
-              Visualisation
-          </q-ribbon>
-          <q-item>
-            <q-item-section>
-              <q-item-label>Number of points</q-item-label>
-            </q-item-section>
-            <q-item-section>
-              <q-slider
-                :value="diagramNumberOfPoints"
-                @input="setDiagramNumberOfPoints"
-                :min="10"
-                :max="2000"
-                :step="1"
-                label
-                color="primary"
-              />
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-item-label>Step Factor</q-item-label>
-            </q-item-section>
-            <q-item-section>
-              <q-slider
-                :disable="animationPlay"
-                :value="diagramFactor"
-                @input="setDiagramFactor"
-                :min="0.01"
-                :max="0.2"
-                :step="0.01"
-                label
-                color="primary"
-              />
-            </q-item-section>
-          </q-item>
-  <!-- Display-->
-          <q-ribbon
-            position="left"
-            color="white"
-            background-color="primary"
-            :leaf-color="displayColour" 
-            decoration="point-in">
-              Display
-          </q-ribbon>
-          <q-item v-ripple tag="label">
-            <q-item-section>
-              <q-item-label>Outer circle</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-toggle color="primary" :value="displayOuterCircle" @input="setDisplayOuterCircle"/>
-            </q-item-section>
-          </q-item>
-          <q-item v-ripple tag="label">
-            <q-item-section>
-              <q-item-label>Points</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-toggle color="primary" :value="displayPoints" @input="setDisplayPoints"/>
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-item-label>Line weight</q-item-label>
-            </q-item-section>
-            <q-item-section>
-              <q-slider
-                :value="display_LineWeight"
-                @input="setDisplay_LineWeight"
-                :min=".1"
-                :max="1"
-                :step=".1"
-                label
-                color="primary"
-              />
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-item-label>Colour</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-input
-                dense
-                :value="displayColour"
-                @input="setDisplayColour"
-                style="max-width: 100px"
-              >
-                <template v-slot:append>
-                  <q-icon name="colorize" class="cursor-pointer">
-                    <q-popup-proxy transition-show="scale" transition-hide="scale">
-                      <q-color 
-                        no-header
-                        no-footer
-                        :value="displayColour" 
-                        @input="setDisplayColour" />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
-            </q-item-section>
-          </q-item>
-  <!-- Animation-->
-          <q-ribbon
-            position="left"
-            color="white"
-            background-color="primary"
-            :leaf-color="displayColour"
-            decoration="point-in">
-              Animation
-          </q-ribbon>
-          <q-item v-ripple tag="label">
-            <q-item-section>
-              <q-item-label>Play</q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-toggle color="primary" :value="animationPlay" @input="setAnimationPlay"/>
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-item-label>Position</q-item-label>
-            </q-item-section>
-            <q-item-section>
-              <q-slider
-                :value="animationPosition"
-                @input="setAnimationPosition"
-                :min="0"
-                :max="diagramNumberOfPoints * diagramNumberOfPoints"
-                :step="1"
-                label
-                color="primary"
-              />
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
-    </q-drawer>
+    <q-drawer v-model="store.menuOpen" overlay side="right" style="background: black">
+      <q-list>
+        <q-item>
+          <q-item-section>
+            <q-item-label style="font-weight: bolder; font-size: larger">
+              Visualisation Options
+            </q-item-label>
+            <q-item-label caption style="font-size: larger">
+              Change the rendering of the visulisation.
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
+        <q-separator inset spaced />
+
+        <q-item>
+          <q-item-section>
+            <q-item-label>Number of points ({{
+              store.diagram.numberOfPoints
+            }})</q-item-label>
+            <q-item-label caption>Set the number of points around the circle to draw lines
+              from.</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section>
+            <q-slider v-model="store.diagram.numberOfPoints" :min="10" :max="2000" :step="1" label />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item v-ripple tag="label">
+          <q-item-section>
+            <q-item-label>Outer circle</q-item-label>
+            <q-item-label caption>Line draw the containing circle.</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-toggle color="primary" v-model="store.display.outerCircle" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item v-ripple tag="label">
+          <q-item-section class="menuItem">
+            <q-item-label>Points</q-item-label>
+            <q-item-label caption>Draw the points around the circle.</q-item-label>
+          </q-item-section>
+          <q-item-section side class="menuItem">
+            <q-toggle color="primary" v-model="store.display.points" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item>
+          <q-item-section class="menuItem">
+            <q-item-label>Line weight ({{ store.display.lineWeight }})</q-item-label>
+            <q-item-label caption>Adding more weight to the line increases the
+              brightness.</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section class="menuItem">
+            <q-slider v-model="store.display.lineWeight" :min="0.1" :max="1" :step="0.1" label color="primary" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item>
+          <q-item-section class="menuItem">
+            <q-item-label>Colour</q-item-label>
+            <q-item-label caption>Sets the draw colour.</q-item-label>
+          </q-item-section>
+          <q-item-section side class="menuItem">
+            <q-input dense v-model="store.display.colour" style="max-width: 100px">
+              <template v-slot:append>
+                <q-icon name="colorize" class="cursor-pointer" color="primary">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-color no-header no-footer v-model="store.display.colour" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+        <q-item>
+          <q-item-section class="menuItem">
+            <q-item-label>Factor Increment ({{ store.animation.increment }})</q-item-label>
+            <q-item-label caption>Control the speed of the animation by adding decimal amount, rather than a whole number,
+              when playing.</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section class="menuItem">
+            <q-slider v-model="store.animation.increment" :min="0.0001" :max="0.0999" :step="0.0001" label
+              color="primary" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item>
+          <q-item-section>
+            <q-item-label>Factor({{ store.diagram.factor }})</q-item-label>
+            <q-item-label caption>Set the multiplication value used to draw the visualisation.</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section class="menuItem">
+            <q-slider :disable="store.animation.play" v-model="store.diagram.factor" :min="1" :max="1000" label
+              color="primary" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item v-ripple tag="label">
+          <q-item-section class="menuItem">
+            <q-item-label>Play</q-item-label>
+            <q-item-label caption>Increments the factor by the step amount below to animate the
+              visualisation.</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-toggle color="primary" v-model="store.animation.play" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+        <q-item v-ripple tag="label">
+          <q-item-section class="menuItem">
+            <q-item-label>Pause</q-item-label>
+            <q-item-label caption>Pause the visualisation at the next whole number.</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-toggle color="primary" v-model="store.animation.pause" />
+          </q-item-section>
+        </q-item>
+
+        <q-separator inset spaced />
+
+      </q-list>
+    </q-drawer>
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script>
-import EssentialLink from 'components/EssentialLink'
+<script setup lang="ts">
+import { useVisulisationStore } from 'src/stores/visulisationStore';
 
-export default {
-  name: 'MainLayout',
- data () {
-    return {
-      leftDrawerOpen: false,
-      x: .1
-    }
-  },
-  computed: {
-    diagramNumberOfPoints () { return this.$store.getters.diagramNumberOfPoints },
-    diagramFactor () { return this.$store.getters.diagramFactor },
-    displayOuterCircle () { return this.$store.getters.displayOuterCircle },
-    displayPoints () { return this.$store.getters.displayPoints },
-    displayColour () { return this.$store.getters.displayColour },
-    display_LineWeight () { return this.$store.getters.display_LineWeight },
-    animationPlay () { return this.$store.getters.animationPlay },
-    animationPosition () { return this.$store.getters.animationPosition }
-  },
-  methods: {
-    setDiagramNumberOfPoints (value) { this.$store.commit('setDiagramNumberOfPoints', value) },
-    setDiagramFactor (value) { this.$store.commit('setDiagramFactor', value) },
-    setDisplayOuterCircle (value) { this.$store.commit('setDisplayOuterCircle', value) },
-    setDisplayPoints (value) { this.$store.commit('setDisplayPoints', value) },
-    setDisplayColour (value) { this.$store.commit('setDisplayColour', value) },
-    setDisplay_LineWeight (value) { this.$store.commit('setDisplay_LineWeight', value) },
-    setAnimationPlay (value) { this.$store.commit('setAnimationPlay', value) },
-    setAnimationPosition (value) { this.$store.commit('setAnimationPosition', parseInt(value)) }
-  }
-}
+const store = useVisulisationStore();
+const toggleMenu = () => (store.menuOpen = !store.menuOpen);
 </script>
+
 <style scoped>
-.fade{
-  background: linear-gradient(145deg,#027be3 11%,#4846ad 75%);
+.fade {
+  background: linear-gradient(145deg, #027be3 11%, #4846ad 75%);
+}
+
+.menu {
+  background: black;
+}
+
+.menuItem {
+  background: black;
+  color: white;
+  max-width: 295px;
 }
 </style>

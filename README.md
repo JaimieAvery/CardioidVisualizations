@@ -1,9 +1,11 @@
-# Modular Multiplication Circle - Create cardioid visualisations.
+# cardioid (cardioid)
 
-Built using [quasar.dev](quasar.dev)
+Cardioid Visualisations
 
 ## Install the dependencies
 ```bash
+yarn
+# or
 npm install
 ```
 
@@ -13,10 +15,27 @@ quasar dev
 ```
 
 
+### Lint the files
+```bash
+yarn lint
+# or
+npm run lint
+```
+
+
+### Format the files
+```bash
+yarn format
+# or
+npm run format
+```
+
+
+
 ### Build the app for production
 ```bash
 quasar build
 ```
 
 ### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
